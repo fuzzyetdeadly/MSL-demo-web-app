@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 as build
 WORKDIR /src
 
 # Copy and restore only the app project
-COPY MyWebApp/MyWebApp.csproj MyWebApp
+COPY MyWebApp/MyWebApp.csproj MyWebApp/
 RUN dotnet restore MyWebApp/MyWebApp.csproj
 
 # Copy the rest of the app source and publish it
