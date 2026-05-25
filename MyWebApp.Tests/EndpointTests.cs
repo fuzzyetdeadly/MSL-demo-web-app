@@ -48,7 +48,6 @@ public class EndpointTests : IClassFixture<WebApplicationFactory<Program>>
     // Note: IRL the value check here isn't that useful.
     // The mock decouples this test from the implementation
     // of the WelcomeService implementation
-    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     Assert.Equal("Welcome! Jane Doe", responseString);
   }
 
@@ -63,7 +62,22 @@ public class EndpointTests : IClassFixture<WebApplicationFactory<Program>>
     var responseString = await response.Content.ReadAsStringAsync();
 
     // Assert
-    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     Assert.Contains("Contoso", responseString);
+  }
+
+  [Theory]
+  [InlineData("/")]
+  [InlineData("/about")]
+  [InlineData("/welcomes")]
+  public async Task Endpoints_HasExpectedStatus(string url)
+  {
+    // Arrange - Initialize the client
+    var client = _factory.CreateClient();
+
+    // Act - Invoke the about page
+    var response = await client.GetAsync(url);
+
+    // Assert
+    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
   }
 }
